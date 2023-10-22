@@ -1,0 +1,35 @@
+Coding with chatGPT --- Using OpenAI’s language model to write Python code for geo-data science --- Tanya Tsui --- https://medium.com/@tanyamarleytsui/coding-with-chatgpt-b50ab3fcb45f
+
+import geopandas as gpd
+from shapely.geometry import Polygon
+
+# Define the bounds of the grid
+min_x, min_y = 0, 0
+max_x, max_y = 10, 10
+
+# Define the size of the cells in the grid
+cell_width, cell_height = 1, 1
+
+# Define the projection to use
+crs = "EPSG:4326"  # WGS84
+
+# Initialize an empty list to store the grid cells
+grid_cells = []
+
+# Iterate over the bounds of the grid and create a Polygon object for each cell
+for x in range(min_x, max_x, cell_width):
+    for y in range(min_y, max_y, cell_height):
+        # Define the coordinates of the cell
+        cell_coords = [(x, y), (x+cell_width, y), (x+cell_width, y+cell_height), (x, y+cell_height)]
+        
+        # Create the Polygon object
+        cell = Polygon(cell_coords)
+        
+        # Add the Polygon to the list
+        grid_cells.append(cell)
+
+# Create the GeoDataFrame
+gdf = gpd.GeoDataFrame(geometry=grid_cells, crs=crs)
+
+# Visualize the grid
+gdf.plot()
